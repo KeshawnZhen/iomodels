@@ -16,24 +16,24 @@ public class NIOClient {
         Socket socket = null;
         BufferedReader in = null;
         PrintWriter out = null;
-        try{
+        try {
             socket = new Socket("127.0.0.1", port);
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
             Scanner sc = new Scanner(System.in);
-            while(true){
+            while (true) {
                 String msg = sc.nextLine(); //here program is blocked
                 System.out.println("read from console: " + msg);
                 out.println(msg);
-                System.out.println("time watting for reponse");
+                //System.out.println("time watting for reponse");
                 String resp = in.readLine();    //here program is also blocked
                 System.out.println("receive form server: " + resp);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (out != null) {
                 out.close();
                 out = null;

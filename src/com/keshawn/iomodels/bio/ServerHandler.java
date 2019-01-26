@@ -20,6 +20,8 @@ public class ServerHandler implements Runnable {
 
     private Socket socket;
 
+
+
     public ServerHandler(Socket socket) {
         this.socket = socket;
     }
@@ -31,7 +33,6 @@ public class ServerHandler implements Runnable {
         PrintWriter out = null;
 
         try{
-
             in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             out = new PrintWriter(this.socket.getOutputStream(), true);
             String content;
@@ -41,7 +42,7 @@ public class ServerHandler implements Runnable {
                 out.println(content);
                 System.out.println("send to client: " + content);
             }
-
+            //这个线程将什么时候销毁？
         }catch (Exception e){
             if(in != null){
                 try {
@@ -64,9 +65,8 @@ public class ServerHandler implements Runnable {
                 }
                 this.socket = null;
             }
+        }finally {
+            Thread.currentThread().interrupt();
         }
-
-
-
     }
 }

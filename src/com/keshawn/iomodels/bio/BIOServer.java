@@ -19,15 +19,15 @@ public class BIOServer {
     public static void main(String[] args) {
         int port = 8080;
         ServerSocket server = null;
-        try{
+        try {
             server = new ServerSocket(port);
             Socket socket = null;
-            while(true){
+            while (true) {
                 socket = server.accept();   //program is blocked in here
+                //每个新的连接都新建一个线程
                 new Thread(new ServerHandler(socket)).start();
-
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

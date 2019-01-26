@@ -16,23 +16,23 @@ public class Client {
         Socket socket = null;
         BufferedReader in = null;
         PrintWriter out = null;
-        try{
+        try {
             socket = new Socket("127.0.0.1", port);
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
             Scanner sc = new Scanner(System.in);
-            while(true){
+            while (true) {
                 String msg = sc.nextLine(); //blocked
                 System.out.println("read from console: " + msg);
                 out.println(msg);
                 String resp = in.readLine();
                 System.out.println("receive form server: " + resp);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (out != null) {
                 out.close();
                 out = null;

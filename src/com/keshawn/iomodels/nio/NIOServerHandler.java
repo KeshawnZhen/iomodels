@@ -13,8 +13,6 @@ import java.util.Set;
 /**
  * Package: com.keshawn.nio
  */
-
-
 public class NIOServerHandler {
 
     private int port;
@@ -23,7 +21,7 @@ public class NIOServerHandler {
         this.port = port;
     }
 
-    public void start() throws  IOException {
+    public void start() throws IOException {
         Selector serverSelector = Selector.open();
         Selector clientSelector = Selector.open();
 
@@ -37,19 +35,19 @@ public class NIOServerHandler {
                 listenerChanner.configureBlocking(false);
                 listenerChanner.register(serverSelector, SelectionKey.OP_ACCEPT);
 
-                while (true){
-                    //blocking time 1 ms
-                    if(serverSelector.select(1) > 0){
+                while (true) {
+                    //最多阻塞1ms
+                    if (serverSelector.select(1) > 0) {
                         Set<SelectionKey> set = serverSelector.selectedKeys();
                         Iterator<SelectionKey> it = set.iterator();
 
-                        while(it.hasNext()){
+                        while (it.hasNext()) {
                             SelectionKey key = it.next();
-                            if(key.isAcceptable()){
+                            if (key.isAcceptable()) {
 
                                 try {
                                     //for every new connection, no other thread need,register it on clientSelector
-                                    SocketChannel clientChannel = ((ServerSocketChannel)key.channel()).accept();
+                                    SocketChannel clientChannel = ((ServerSocketChannel) key.channel()).accept();
                                     clientChannel.configureBlocking(false);
                                     clientChannel.register(clientSelector, SelectionKey.OP_READ);
                                 } finally {
@@ -70,14 +68,14 @@ public class NIOServerHandler {
         //thread for processing read data
         new Thread(() -> {
             try {
-                while(true){
-                    if(clientSelector.select(1) > 0){
+                while (true) {
+                    if (clientSelector.select(1) > 0) {
                         Set<SelectionKey> set = clientSelector.selectedKeys();
                         Iterator<SelectionKey> it = set.iterator();
-                        while(it.hasNext()){
+                        while (it.hasNext()) {
                             SelectionKey key = it.next();
 
-                            if(key.isReadable()){
+                            if (key.isReadable()) {
 
                                 try {
                                     SocketChannel clientChannel = (SocketChannel) key.channel();
@@ -93,9 +91,9 @@ public class NIOServerHandler {
                                         System.out.println("Send to client: " + msg);
                                         doWrite(clientChannel, msg);
                                     }
-                                }
-                                finally {
+                                } finally {
                                     it.remove();
+                                    //
                                     key.interestOps(SelectionKey.OP_READ);
                                 }
 
